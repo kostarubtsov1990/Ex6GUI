@@ -17,7 +17,11 @@ public class Controller {
     private Button button;
 @FXML
     protected void signIn() throws Exception{
-
+    Stage primaryStage = new Stage();
+    Parent root = FXMLLoader.load(getClass().getResource("settings.fxml"));
+    primaryStage.setTitle("Settings");
+    primaryStage.setScene(new Scene(root, 300, 275));
+    primaryStage.show();
         //button.setEffect(new DropShadow());
     }
 }
