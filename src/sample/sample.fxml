@@ -8,8 +8,8 @@
 
 <Pane fx:controller="sample.Controller" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <Button fx:id="button" layoutX="239.0" layoutY="121.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="123.0" text="New Game" onAction="#signIn" />
-      <Button  layoutX="505.0" layoutY="312.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="61.0" text="">
+      <Button  layoutX="239.0" layoutY="121.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="123.0" text="New Game"  onAction="#gameHandler" />
+      <Button fx:id="button" layoutX="505.0" layoutY="312.0" mnemonicParsing="false" prefHeight="43.0" prefWidth="61.0" text="" onAction="#settingsHandler">
           <font>
        <Font size="30.0" />
    </font>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<GridPane xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="sample.Controller" alignment="center"
+          hgap="10" vgap="10">
+   <padding><Insets top="25" right="25" bottom="10"
+                    left="25"></Insets></padding>
+   <Text text="Settings configuration"
+         GridPane.rowIndex="0" GridPane.columnIndex="0"
+         GridPane.columnSpan="2"/>
+   <Label text="Starting Player:"
+          GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+   <TextField fx:id="startingPlayer"
+              GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+   <Label text="Player Symbol Color:"
+          GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+   <TextField fx:id="symbolField"
+                  GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+   <Label text="Board Size:"
+          GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+   <TextField fx:id="boardSizeField"
+              GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+   <HBox alignment="bottom_right"
+         GridPane.rowIndex="4" GridPane.columnIndex="1">
+   <Button text="Accept" onAction="#AcceptSetttings"/>
+</HBox>
+   <Text fx:id="messageText"
+         GridPane.rowIndex="6" GridPane.columnIndex="0"/>
+</GridPane>
