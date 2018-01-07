@@ -54,7 +54,10 @@ public class Controller{
     }
     @FXML
     protected void gameHandler () throws Exception {
-        //create grid dynamically
-        System.out.println(Context.getInstance().GetPlayer());
+        Stage primaryStage = new Stage();
+        Parent root = FXMLLoader.load(getClass().getResource("GameStylePattern.fxml"));
+        primaryStage.setTitle("Reversi Game");
+        primaryStage.setScene(new Scene(root, 600, 500));
+        primaryStage.show();
     }
 }
