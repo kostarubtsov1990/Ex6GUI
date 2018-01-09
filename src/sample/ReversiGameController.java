@@ -6,8 +6,11 @@ import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -19,8 +22,15 @@ public class ReversiGameController implements Initializable {
     private Pane root;
     @FXML
     private Text currentPlayer;
+    ReversiGame game;
+
+    int reversiBoardSize;
+    String startingPlayer;
+    Color firstPlayer, secondPlayer;
+
+
     //This is just an example the board will be provided by the C++ libraries where the logic is defined.
-    private int[][] gameBoard = {
+    private int[][] reversiGameBoard = {
             {0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0},
             {0,0,0,0,0,0,0,0},
@@ -33,27 +43,51 @@ public class ReversiGameController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle
             resources) {
-        Board reversiBoard = new Board(gameBoard);
+        LoadSettingsInfo ();
+        Board reversiBoard = new Board(reversiBoardSize, firstPlayer, secondPlayer);
         reversiBoard.setPrefWidth(400);
         reversiBoard.setPrefHeight(400);
         reversiBoard.setTranslateX(10);
         reversiBoard.setTranslateY(10);
         reversiBoard.setOnMouseClicked(
                 e-> {
-                    if (currentPlayer.getText().equals("Black"))
-                        gameBoard[reversiBoard.getClickedChildNode().GetY()][reversiBoard.getClickedChildNode().GetX()] = 1;
-                    else
-                        gameBoard[reversiBoard.getClickedChildNode().GetY()][reversiBoard.getClickedChildNode().GetX()] = 2;
+                    runGameFlow(currentPlayer.getText());
                     reversiBoard.draw();
-                    //We will run this method to handle the actual game process.
-                    //runGameFlow();
+
                 }
         );
         root.getChildren().add(reversiBoard);
         reversiBoard.draw();
+        game = new ReversiGame(reversiBoard);
     }
 
-    public void runGameFlow () {
+    public void runGameFlow (String currentPlayer) {
+        //Here we will implement the player turn handling
 
     }
+
+    private void LoadSettingsInfo () {
+        try(BufferedReader br = new BufferedReader(new FileReader("settings.txt"))) {
+            startingPlayer = br.readLine();
+
+            String playersColors = br.readLine();
+            String [] parts = playersColors.split(":");
+            String [] partsByComma = parts[1].split(",");
+            String firstPlayerColor = partsByComma[1];
+            String secondPlayerColor = parts[2];
+
+            SetColor(firstPlayerColor, secondPlayerColor);
+
+            reversiBoardSize = Integer.parseInt(br.readLine());
+
+        } catch (Exception exception) {}
+    }
+
+    void SetColor (String firstPlayer, String secondPlayer) {
+        //temporary set these colors
+        this.firstPlayer = Color.BLACK;
+        this.secondPlayer = Color.WHITE;
+    }
+
+
 }

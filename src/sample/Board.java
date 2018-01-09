@@ -10,20 +10,49 @@ import javafx.scene.shape.Rectangle;
 
 import java.io.IOException;
 
+import static sample.Board.symbol.blank;
+import static sample.Board.symbol.oSymbol;
+import static sample.Board.symbol.xSymbol;
+
 /**
  * Created by kostarubtsov1990 on 07/01/18.
  */
 public class Board extends GridPane {
 
-    private int [][] board;
-    private static final int xSymbol = 1;
-    private static final int oSymbol = 2;
-    private static final int blank = 0;
+    enum symbol {xSymbol, oSymbol, blank}
 
+    private symbol [][] board;
     private Cell clickedNode;
+    Color firstPlayerColor, secondPlayerColor;
 
-    public Board (int [][] board) {
-        this.board = board;
+    public Board (int size, Color firstPlayerColor, Color secondPlayerColor) {
+        this.board = new symbol[size][size];
+        int centerX, centerY;
+
+        if (size % 2 == 0) {
+            centerX = size / 2 - 1;
+            centerY = size / 2 - 1;
+        }
+        else {
+            centerX = size / 2;
+            centerY = size / 2;
+        }
+
+
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                this.board[i][j] = blank;
+            }
+        }
+
+        this.board[centerX][centerY] = oSymbol;
+        this.board[centerX + 1][centerY] = xSymbol;
+        this.board[centerX][centerY + 1] = xSymbol;
+        this.board[centerX + 1][centerY + 1] = oSymbol;
+
+        this.firstPlayerColor = firstPlayerColor;
+        this.secondPlayerColor = secondPlayerColor;
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("ReversiBoard.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -36,7 +65,7 @@ public class Board extends GridPane {
         }
     }
 
-    public void SetBoard (int [][] board) {
+    public void SetBoard (symbol [][] board) {
         this.board = board;
     }
 

@@ -16,23 +16,12 @@ import javafx.stage.Stage;
 public class Controller{
     @FXML
     private Button button;
-    @FXML
-    private TextField startingPlayer;
-    @FXML
-    private TextField symbolField;
-    @FXML
-    private TextField boardSizeField;
-    @FXML
-    private Text messageText;
+
 
 
     private String startPlayer;
     private String symField;
     private String sizeField;
-
-    public Controller() {
-        System.out.println("bla");
-    }
 
     @FXML
     protected void settingsHandler() throws Exception{
@@ -43,15 +32,7 @@ public class Controller{
         primaryStage.show();
         //button.setEffect(new DropShadow());
     }
-    @FXML
-    protected void AcceptSetttings () {
-        startPlayer = startingPlayer.getText();
-        Context.getInstance().SetPlayer(startPlayer);
-        symField = symbolField.getText();
-        sizeField = boardSizeField.getText();
-        messageText.setText("Settings accepted!");
-        messageText.setFill(Color.BLUE);
-    }
+
     @FXML
     protected void gameHandler () throws Exception {
         Stage primaryStage = new Stage();
