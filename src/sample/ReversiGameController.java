@@ -12,6 +12,7 @@ import javafx.scene.text.Text;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -22,12 +23,12 @@ public class ReversiGameController implements Initializable {
     private Pane root;
     @FXML
     private Text currentPlayer;
-    ReversiGame game;
+    private ReversiGame game;
 
-    int reversiBoardSize;
-    String startingPlayer;
-    Color firstPlayer, secondPlayer;
-
+    private int reversiBoardSize;
+    private String startingPlayer;
+    private Color firstPlayer, secondPlayer;
+    private Map<String, Integer> playerNameToSymbolValue;
 
     //This is just an example the board will be provided by the C++ libraries where the logic is defined.
     private int[][] reversiGameBoard = {
@@ -58,10 +59,54 @@ public class ReversiGameController implements Initializable {
         );
         root.getChildren().add(reversiBoard);
         reversiBoard.draw();
-        game = new ReversiGame(reversiBoard);
+        game = new ReversiGame(reversiBoard, new DefaultReversiGameLogic());
     }
 
     public void runGameFlow (String currentPlayer) {
+        Board board = game.GetBoard();
+        GameLogic logic = game.GetGameLogic();
+
+        if (!logic.IsGameOver(ConvertSymbolArrayToIntArray (board.GetBoard()))) {
+
+            logic.CheckPossibleMoves(ConvertSymbolArrayToIntArray (board.GetBoard()),
+                    playerNameToSymbolValue.get(currentPlayer));
+
+            //need to check if the vector of c++ side pointer to dynamic allocation of GameLogic is empty or not
+            //to add appropriate method
+
+            if (!logic.IsPossibleMoveExist()) {
+                //to do the appropriate steps to show the user that there no turn for him
+                return;
+            }
+
+            if (!logic.CheckLocation(board.getClickedChildNode().GetY(), board.getClickedChildNode().GetX())) {
+                //to ask the user (show him on the GUI) to try again
+                return;
+            }
+
+            int [][] updatedBoardContent = logic.UpdateBoard(ConvertSymbolArrayToIntArray (board.GetBoard()),
+                    board.getClickedChildNode().GetY(), board.getClickedChildNode().GetX(),
+                    playerNameToSymbolValue.get(currentPlayer));
+
+            //TO DO: add a function or maybe some generic method to existing function of conversion below,
+            //to convert the primitive int 2d array board content to enum symbol type
+
+        }
+
+        else {
+            String winner = "";
+            Integer winnerValue = logic.DeclareWinner(ConvertSymbolArrayToIntArray (board.GetBoard()));
+            for (Map.Entry <String, Integer> entry: playerNameToSymbolValue.entrySet()) {
+                if(winnerValue.equals(entry.getValue())){
+                    winner = entry.getKey();
+                    break; //breaking because its one to one map
+                }
+            }
+
+            //TO DO: show the winner on the GUI and appropriate messege that the game is over
+
+        }
+
         //Here we will implement the player turn handling
 
     }
@@ -89,5 +134,17 @@ public class ReversiGameController implements Initializable {
         this.secondPlayer = Color.WHITE;
     }
 
+    private int [][] ConvertSymbolArrayToIntArray (Board.symbol [][] symbolBoard) {
+        int row = symbolBoard.length;
+        int col = symbolBoard[0].length;
 
+        int [][] board = new int[row][col];
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                board[i][j] = symbolBoard[i][j].ordinal();
+            }
+        }
+        return board;
+    }
 }

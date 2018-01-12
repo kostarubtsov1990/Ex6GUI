@@ -8,19 +8,21 @@ import java.util.List;
  */
 public class DefaultReversiGameLogic extends GameLogic{
 
-    List<Cell> xsLocation;
-    List<Cell> osLocation;
+
+    private long self_ptr;
 
     DefaultReversiGameLogic () {
-        super.possibleMoves = new ArrayList<Cell>();
-        xsLocation = new ArrayList<Cell>();
-        osLocation = new ArrayList<Cell>();
+        initialize ();
     }
 
-    public native void CheckPossibleMoves(final Board board, ReversiGame.player player, Board.symbol playerSymbol);
-    public native void UpdateBoard(final Board board, Cell coordinate, ReversiGame.player player);
-    public native boolean CheckLocation(Cell coordinate);
-    public native boolean IsGameOver(final Board board);
-    public native Board.symbol DeclareWinner (final Board board);
+    private native void initialize ();
+    public native void CheckPossibleMoves(int [][] board, int player);
+    public native int[][] UpdateBoard(int [][] board, int x, int y, int player);
+    public native boolean CheckLocation(int x, int y);
+    public native boolean IsGameOver(int [][] board);
+    public native int DeclareWinner (int [][] board);
+    public native boolean IsPossibleMoveExist ();
+
+    private native void destroy ();
 
 }

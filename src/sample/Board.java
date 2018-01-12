@@ -68,6 +68,9 @@ public class Board extends GridPane {
     public void SetBoard (symbol [][] board) {
         this.board = board;
     }
+    public symbol [][] GetBoard () {
+        return board;
+    }
 
     public void draw() {
         this.getChildren().clear();

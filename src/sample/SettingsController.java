@@ -58,29 +58,30 @@ public class SettingsController implements Initializable {
         String inputText = "";
         try(BufferedReader br = new BufferedReader(new FileReader("settings.txt"))) {
 
-            if (startingPlayer.getText() == null && symbolColorField.getText() == null && boardSizeField.getText() == null) {
+            if (startingPlayer.getText().equals("") && symbolColorField.getText().equals("")
+                    && boardSizeField.getText().equals("")) {
                 return;
 
             } else {
 
-                if (startingPlayer.getText() != null) {
+                if (!startingPlayer.getText().equals("")) {
                     inputText += startingPlayer.getText() + "\n";
                     br.readLine();
                 } else {
-                    inputText += br.readLine();
+                    inputText += br.readLine() + "\n";;
                 }
 
-                if (symbolColorField.getText() != null) {
+                if (!symbolColorField.getText().equals("")) {
                     inputText += symbolColorField.getText() + "\n";
                     br.readLine();
                 } else {
-                    inputText += br.readLine();
+                    inputText += br.readLine() + "\n";;
                 }
 
-                if (boardSizeField.getText() != null) {
+                if (!boardSizeField.getText().equals("")) {
                     inputText += boardSizeField.getText() + "\n";
                 } else {
-                    inputText += br.readLine();
+                    inputText += br.readLine() + "\n";;
                 }
             }
 

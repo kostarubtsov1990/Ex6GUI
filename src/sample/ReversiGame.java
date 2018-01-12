@@ -9,8 +9,17 @@ public class ReversiGame {
     private Board board;
     private GameLogic logic;
 
-    ReversiGame (Board board) {
+    ReversiGame (Board board, GameLogic logic) {
         this.board = board;
+        this.logic = logic;
+    }
+
+    public GameLogic GetGameLogic() {
+        return logic;
+    }
+
+    public Board GetBoard() {
+        return board;
     }
 
 }

@@ -8,14 +8,11 @@ import java.util.List;
  */
 public abstract class GameLogic {
 
-    List<Cell> possibleMoves;
 
-    public abstract void CheckPossibleMoves(final Board board, ReversiGame.player player, Board.symbol playerSymbol);
-    public abstract void UpdateBoard(final Board board, Cell coordinate, ReversiGame.player player);
-    public List <Cell> getPossibleMoves() {
-        return possibleMoves;
-    }
-    public abstract boolean CheckLocation(Cell coordinate);
-    public abstract boolean IsGameOver(final Board board);
-    public abstract Board.symbol DeclareWinner (final Board board);
+    public abstract void CheckPossibleMoves(int [][] board, int player);
+    public abstract int[][] UpdateBoard(int [][] board, int x, int y, int player);
+    public abstract boolean CheckLocation(int x, int y);
+    public abstract boolean IsGameOver(int [][] board);
+    public abstract int DeclareWinner (int [][] board);
+    public abstract boolean IsPossibleMoveExist ();
 }
