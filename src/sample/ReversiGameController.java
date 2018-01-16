@@ -66,9 +66,9 @@ public class ReversiGameController implements Initializable {
         Board board = game.GetBoard();
         GameLogic logic = game.GetGameLogic();
 
-        if (!logic.IsGameOver(ConvertSymbolArrayToIntArray (board.GetBoard()))) {
+        if (!logic.IsGameOver(ConvertSymbolArrayToIntegerArray (board.GetBoard()))) {
 
-            logic.CheckPossibleMoves(ConvertSymbolArrayToIntArray (board.GetBoard()),
+            logic.CheckPossibleMoves(ConvertSymbolArrayToIntegerArray (board.GetBoard()),
                     playerNameToSymbolValue.get(currentPlayer));
 
             //need to check if the vector of c++ side pointer to dynamic allocation of GameLogic is empty or not
@@ -84,9 +84,13 @@ public class ReversiGameController implements Initializable {
                 return;
             }
 
-            int [][] updatedBoardContent = logic.UpdateBoard(ConvertSymbolArrayToIntArray (board.GetBoard()),
+            int [][] updatedBoardContent = logic.UpdateBoard(ConvertSymbolArrayToIntegerArray (board.GetBoard()),
                     board.getClickedChildNode().GetY(), board.getClickedChildNode().GetX(),
                     playerNameToSymbolValue.get(currentPlayer));
+
+            board.SetBoard(ConvertIntegerArrayToSymbolArray(updatedBoardContent));
+
+            board.draw();
 
             //TO DO: add a function or maybe some generic method to existing function of conversion below,
             //to convert the primitive int 2d array board content to enum symbol type
@@ -95,7 +99,7 @@ public class ReversiGameController implements Initializable {
 
         else {
             String winner = "";
-            Integer winnerValue = logic.DeclareWinner(ConvertSymbolArrayToIntArray (board.GetBoard()));
+            Integer winnerValue = logic.DeclareWinner(ConvertSymbolArrayToIntegerArray (board.GetBoard()));
             for (Map.Entry <String, Integer> entry: playerNameToSymbolValue.entrySet()) {
                 if(winnerValue.equals(entry.getValue())){
                     winner = entry.getKey();
@@ -134,7 +138,8 @@ public class ReversiGameController implements Initializable {
         this.secondPlayer = Color.WHITE;
     }
 
-    private int [][] ConvertSymbolArrayToIntArray (Board.symbol [][] symbolBoard) {
+
+    private int [][] ConvertSymbolArrayToIntegerArray(Board.symbol [][] symbolBoard) {
         int row = symbolBoard.length;
         int col = symbolBoard[0].length;
 
@@ -147,4 +152,21 @@ public class ReversiGameController implements Initializable {
         }
         return board;
     }
+
+    private Board.symbol[][] ConvertIntegerArrayToSymbolArray (int [][] integerBoard) {
+        int row = integerBoard.length;
+        int col = integerBoard[0].length;
+
+        Board.symbol [][] board = new Board.symbol[row][col];
+
+        for (int i = 0; i < row; i++) {
+            for (int j = 0; j < col; j++) {
+                board[i][j] = Board.symbol.values()[integerBoard[i][j]] ;
+            }
+        }
+        return board;
+    }
+
 }
+
+

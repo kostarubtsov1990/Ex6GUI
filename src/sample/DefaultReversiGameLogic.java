@@ -11,6 +11,10 @@ public class DefaultReversiGameLogic extends GameLogic{
 
     private long self_ptr;
 
+    static {
+        System.loadLibrary("JNIforEx6GUI");
+    }
+
     DefaultReversiGameLogic () {
         initialize ();
     }
