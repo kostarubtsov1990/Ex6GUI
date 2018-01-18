@@ -1,17 +1,23 @@
 package sample;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -23,6 +29,10 @@ public class ReversiGameController implements Initializable {
     private Pane root;
     @FXML
     private Text currentPlayer;
+    @FXML
+    private Text xPlayerScore;
+    @FXML
+    private Text oPlayerScore;
     private ReversiGame game;
 
     private int reversiBoardSize;
@@ -30,21 +40,14 @@ public class ReversiGameController implements Initializable {
     private Color firstPlayer, secondPlayer;
     private Map<String, Integer> playerNameToSymbolValue;
 
-    //This is just an example the board will be provided by the C++ libraries where the logic is defined.
-    private int[][] reversiGameBoard = {
-            {0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0},
-            {0,0,0,1,2,0,0,0},
-            {0,0,0,2,1,0,0,0},
-            {0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0},
-            {0,0,0,0,0,0,0,0},
-    };
     @Override
     public void initialize(URL location, ResourceBundle
             resources) {
-        LoadSettingsInfo ();
+        playerNameToSymbolValue = new HashMap<>();
+        playerNameToSymbolValue.put("Black", 0);
+        playerNameToSymbolValue.put("White", 1);
+        LoadSettingsInfo();
+        currentPlayer.setText(startingPlayer);
         Board reversiBoard = new Board(reversiBoardSize, firstPlayer, secondPlayer);
         reversiBoard.setPrefWidth(400);
         reversiBoard.setPrefHeight(400);
@@ -65,7 +68,7 @@ public class ReversiGameController implements Initializable {
     public void runGameFlow (String currentPlayer) {
         Board board = game.GetBoard();
         GameLogic logic = game.GetGameLogic();
-
+        int [][] integerBoardContent = ConvertSymbolArrayToIntegerArray (board.GetBoard());
         if (!logic.IsGameOver(ConvertSymbolArrayToIntegerArray (board.GetBoard()))) {
 
             logic.CheckPossibleMoves(ConvertSymbolArrayToIntegerArray (board.GetBoard()),
@@ -75,6 +78,7 @@ public class ReversiGameController implements Initializable {
             //to add appropriate method
 
             if (!logic.IsPossibleMoveExist()) {
+                SwitchSides(currentPlayer);
                 //to do the appropriate steps to show the user that there no turn for him
                 return;
             }
@@ -88,9 +92,16 @@ public class ReversiGameController implements Initializable {
                     board.getClickedChildNode().GetY(), board.getClickedChildNode().GetX(),
                     playerNameToSymbolValue.get(currentPlayer));
 
+            SwitchSides(currentPlayer);
+
             board.SetBoard(ConvertIntegerArrayToSymbolArray(updatedBoardContent));
 
             board.draw();
+            logic.UpdateScore(board.GetBoard());
+            Score score = logic.GetScore();
+
+            xPlayerScore.setText(Integer.toString(score.GetXScore()));
+            oPlayerScore.setText(Integer.toString(score.GetOScore()));
 
             //TO DO: add a function or maybe some generic method to existing function of conversion below,
             //to convert the primitive int 2d array board content to enum symbol type
@@ -98,14 +109,37 @@ public class ReversiGameController implements Initializable {
         }
 
         else {
-            String winner = "";
+            String winnerPlayer = "";
             Integer winnerValue = logic.DeclareWinner(ConvertSymbolArrayToIntegerArray (board.GetBoard()));
             for (Map.Entry <String, Integer> entry: playerNameToSymbolValue.entrySet()) {
                 if(winnerValue.equals(entry.getValue())){
-                    winner = entry.getKey();
+                    winnerPlayer = entry.getKey();
                     break; //breaking because its one to one map
                 }
             }
+            try {
+                Stage primaryStage = new Stage();
+
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("WinnerStage.fxml"));
+                Parent root = loader.load();
+
+                WinnerStageController winnerStageController = loader.<WinnerStageController>getController();
+                if (!winnerPlayer.equals("")) {
+                    winnerStageController.SetWinnerMessegeText(winnerPlayer + " is the winner!");
+                }
+                else {
+                    winnerStageController.SetWinnerMessegeText("its a draw!");
+                }
+                primaryStage.setTitle("Winner");
+                primaryStage.setScene(new Scene(root, 167, 68));
+                primaryStage.showAndWait();
+
+                // get a handle to the stage
+                Stage stage = (Stage) root.getScene().getWindow();
+                // do what you have to do
+                stage.close();
+
+            } catch (IOException exeption) {}
 
             //TO DO: show the winner on the GUI and appropriate messege that the game is over
 
@@ -167,6 +201,13 @@ public class ReversiGameController implements Initializable {
         return board;
     }
 
+    private void SwitchSides(String currentPlayer) {
+        if (currentPlayer.equals("Black")) {
+            this.currentPlayer.setText("White");
+        }
+        else {
+            this.currentPlayer.setText("Black");
+        }
+    }
+
 }
-
-

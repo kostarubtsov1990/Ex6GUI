@@ -12,8 +12,8 @@
      
       <Label layoutX="441.0" layoutY="78.0" prefHeight="16.0" prefWidth="80.0" text="Black score:" />
       <Label layoutX="440.0" layoutY="109.0" text="White score:" />
-      <Text fx:id="currentPlayer" layoutX="550.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text layoutX="550.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-      <Text layoutX="550.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text fx:id="currentPlayer" layoutX="550.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Black" />
+      <Text fx:id="xPlayerScore" layoutX="550.0" layoutY="91.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+      <Text fx:id="oPlayerScore" layoutX="550.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
    </children>
 </Pane>

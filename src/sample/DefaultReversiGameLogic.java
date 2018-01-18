@@ -9,6 +9,7 @@ import java.util.List;
 public class DefaultReversiGameLogic extends GameLogic{
 
 
+
     private long self_ptr;
 
     static {
@@ -17,6 +18,7 @@ public class DefaultReversiGameLogic extends GameLogic{
 
     DefaultReversiGameLogic () {
         initialize ();
+        super.score = new ReversiGameScore();
     }
 
     private native void initialize ();
@@ -26,7 +28,9 @@ public class DefaultReversiGameLogic extends GameLogic{
     public native boolean IsGameOver(int [][] board);
     public native int DeclareWinner (int [][] board);
     public native boolean IsPossibleMoveExist ();
-
+    public void UpdateScore(Board.symbol [][] boardContent) {
+        score.UpdateScore(boardContent);
+    }
     private native void destroy ();
 
 }

@@ -8,6 +8,7 @@ import java.util.List;
  */
 public abstract class GameLogic {
 
+    Score score;
 
     public abstract void CheckPossibleMoves(int [][] board, int player);
     public abstract int[][] UpdateBoard(int [][] board, int x, int y, int player);
@@ -15,4 +16,8 @@ public abstract class GameLogic {
     public abstract boolean IsGameOver(int [][] board);
     public abstract int DeclareWinner (int [][] board);
     public abstract boolean IsPossibleMoveExist ();
+    public Score GetScore() {
+        return score;
+    }
+    public abstract void UpdateScore(Board.symbol [][] boardContent);
 }
