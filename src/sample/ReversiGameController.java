@@ -47,6 +47,7 @@ public class ReversiGameController implements Initializable {
         playerNameToSymbolValue.put("Black", 0);
         playerNameToSymbolValue.put("White", 1);
         LoadSettingsInfo();
+
         currentPlayer.setText(startingPlayer);
         Board reversiBoard = new Board(reversiBoardSize, firstPlayer, secondPlayer);
         reversiBoard.setPrefWidth(400);
@@ -69,7 +70,6 @@ public class ReversiGameController implements Initializable {
         Board board = game.GetBoard();
         GameLogic logic = game.GetGameLogic();
         int [][] integerBoardContent = ConvertSymbolArrayToIntegerArray (board.GetBoard());
-        if (!logic.IsGameOver(ConvertSymbolArrayToIntegerArray (board.GetBoard()))) {
 
             logic.CheckPossibleMoves(ConvertSymbolArrayToIntegerArray (board.GetBoard()),
                     playerNameToSymbolValue.get(currentPlayer));
@@ -92,6 +92,7 @@ public class ReversiGameController implements Initializable {
                     board.getClickedChildNode().GetY(), board.getClickedChildNode().GetX(),
                     playerNameToSymbolValue.get(currentPlayer));
 
+
             SwitchSides(currentPlayer);
 
             board.SetBoard(ConvertIntegerArrayToSymbolArray(updatedBoardContent));
@@ -103,49 +104,41 @@ public class ReversiGameController implements Initializable {
             xPlayerScore.setText(Integer.toString(score.GetXScore()));
             oPlayerScore.setText(Integer.toString(score.GetOScore()));
 
-            //TO DO: add a function or maybe some generic method to existing function of conversion below,
-            //to convert the primitive int 2d array board content to enum symbol type
 
-        }
+            if (logic.IsGameOver(ConvertSymbolArrayToIntegerArray (board.GetBoard()))) {
 
-        else {
-            String winnerPlayer = "";
-            Integer winnerValue = logic.DeclareWinner(ConvertSymbolArrayToIntegerArray (board.GetBoard()));
-            for (Map.Entry <String, Integer> entry: playerNameToSymbolValue.entrySet()) {
-                if(winnerValue.equals(entry.getValue())){
-                    winnerPlayer = entry.getKey();
-                    break; //breaking because its one to one map
+                String winnerPlayer = "";
+                Integer winnerValue = logic.DeclareWinner(ConvertSymbolArrayToIntegerArray (board.GetBoard()));
+                for (Map.Entry <String, Integer> entry: playerNameToSymbolValue.entrySet()) {
+                    if(winnerValue.equals(entry.getValue())){
+                        winnerPlayer = entry.getKey();
+                        break; //breaking because its one to one map
+                    }
                 }
+                try {
+                    Stage primaryStage = new Stage();
+
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource("WinnerStage.fxml"));
+                    Parent root = loader.load();
+
+                    WinnerStageController winnerStageController = loader.<WinnerStageController>getController();
+                    if (!winnerPlayer.equals("")) {
+                        winnerStageController.SetWinnerMessegeText(winnerPlayer + " is the winner!");
+                    }
+                    else {
+                        winnerStageController.SetWinnerMessegeText("its a draw!");
+                    }
+                    primaryStage.setTitle("Winner");
+                    primaryStage.setScene(new Scene(root, 167, 68));
+                    primaryStage.showAndWait();
+
+                    // get a handle to the stage
+                    Stage stage = (Stage) root.getScene().getWindow();
+                    // do what you have to do
+                    stage.close();
+
+                } catch (IOException exeption) {}
             }
-            try {
-                Stage primaryStage = new Stage();
-
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("WinnerStage.fxml"));
-                Parent root = loader.load();
-
-                WinnerStageController winnerStageController = loader.<WinnerStageController>getController();
-                if (!winnerPlayer.equals("")) {
-                    winnerStageController.SetWinnerMessegeText(winnerPlayer + " is the winner!");
-                }
-                else {
-                    winnerStageController.SetWinnerMessegeText("its a draw!");
-                }
-                primaryStage.setTitle("Winner");
-                primaryStage.setScene(new Scene(root, 167, 68));
-                primaryStage.showAndWait();
-
-                // get a handle to the stage
-                Stage stage = (Stage) root.getScene().getWindow();
-                // do what you have to do
-                stage.close();
-
-            } catch (IOException exeption) {}
-
-            //TO DO: show the winner on the GUI and appropriate messege that the game is over
-
-        }
-
-        //Here we will implement the player turn handling
 
     }
 
@@ -156,7 +149,7 @@ public class ReversiGameController implements Initializable {
             String playersColors = br.readLine();
             String [] parts = playersColors.split(":");
             String [] partsByComma = parts[1].split(",");
-            String firstPlayerColor = partsByComma[1];
+            String firstPlayerColor = partsByComma[0];
             String secondPlayerColor = parts[2];
 
             SetColor(firstPlayerColor, secondPlayerColor);
@@ -168,8 +161,10 @@ public class ReversiGameController implements Initializable {
 
     void SetColor (String firstPlayer, String secondPlayer) {
         //temporary set these colors
-        this.firstPlayer = Color.BLACK;
-        this.secondPlayer = Color.WHITE;
+        ColorMap colorMap = new ColorMap();
+
+        this.firstPlayer = colorMap.GetColor(firstPlayer);
+        this.secondPlayer = colorMap.GetColor(secondPlayer);
     }
 
 

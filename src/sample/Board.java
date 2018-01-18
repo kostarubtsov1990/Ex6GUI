@@ -94,7 +94,8 @@ public class Board extends GridPane {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == xSymbol) {
                     Rectangle rectangle = new Rectangle(cellWidth, cellHeight,
-                            Color.BLACK);
+                            firstPlayerColor);
+                    rectangle.setStroke(Color.BLACK);
                     final int row = i, col = j;
                     rectangle.setOnMouseClicked(e-> {
                         clickedNode = new Cell(col, row);
@@ -105,7 +106,8 @@ public class Board extends GridPane {
                 }
                 else if (board[i][j] == oSymbol) {
                     Rectangle rectangle = new Rectangle(cellWidth, cellHeight,
-                            Color.WHITE);
+                            secondPlayerColor);
+                    rectangle.setStroke(Color.BLACK);
                     final int row = i, col = j;
                     rectangle.setOnMouseClicked(e-> {
                         clickedNode = new Cell(col, row);
@@ -117,6 +119,7 @@ public class Board extends GridPane {
                 else {
                     Rectangle rectangle = new Rectangle(cellWidth, cellHeight,
                             Color.ORANGE);
+                    rectangle.setStroke(Color.BLACK);
                     final int row = i, col = j;
                     rectangle.setOnMouseClicked(e-> {
                         clickedNode = new Cell(col, row);
@@ -131,5 +134,9 @@ public class Board extends GridPane {
 
     public Cell getClickedChildNode () {
         return clickedNode;
+    }
+
+    public int GetBoardSize() {
+        return board.length;
     }
 }

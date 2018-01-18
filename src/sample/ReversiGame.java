@@ -12,6 +12,7 @@ public class ReversiGame {
     ReversiGame (Board board, GameLogic logic) {
         this.board = board;
         this.logic = logic;
+        this.logic.SetGameSize(board.GetBoardSize());
     }
 
     public GameLogic GetGameLogic() {

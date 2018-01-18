@@ -10,6 +10,7 @@ public abstract class GameLogic {
 
     Score score;
 
+
     public abstract void CheckPossibleMoves(int [][] board, int player);
     public abstract int[][] UpdateBoard(int [][] board, int x, int y, int player);
     public abstract boolean CheckLocation(int x, int y);
@@ -20,4 +21,5 @@ public abstract class GameLogic {
         return score;
     }
     public abstract void UpdateScore(Board.symbol [][] boardContent);
+    public abstract void SetGameSize(int gameSize);
 }
