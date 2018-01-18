@@ -1,5 +1,7 @@
 package sample;
 
+import sun.plugin2.util.SystemUtil;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,17 +22,24 @@ public class DefaultReversiGameLogic extends GameLogic{
     private int gameSize;
 
     static {
-
-        File libraryFile = new File("libJNIforEx6GUI.so");
-        /*try (InputStream is = DefaultReversiGameLogic.class.getResourceAsStream("libJNIforEx6GUI.so")) {
+        String OS = System.getProperty("os.name");
+        String libraryName;
+        if (OS.contains("Linux")) {
+            libraryName = "libJNIforEx6GUI.so";
+        }
+        else {
+            libraryName = "libJNIforEx6GUI.dll";
+        }
+        File libraryFile = new File(libraryName);
+        try (InputStream is = DefaultReversiGameLogic.class.getResourceAsStream(libraryName)) {
         Files.copy(is, libraryFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {}*/
+        } catch (IOException e) {}
         //String testing = libraryFile.getAbsolutePath();
             System.load(libraryFile.getAbsolutePath());
         }
 
     DefaultReversiGameLogic () {
-        //initialize ();
+        initialize ();
         super.score = new ReversiGameScore();
     }
 
